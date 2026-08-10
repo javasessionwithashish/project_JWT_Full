@@ -31,6 +31,8 @@ public class SecurityConfig {
     );
 
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+	//hamro username and password authentication form based data bata aaune bhako le
+		//jwtauthfilter lai usernamepwd authentication  filter bata pathako chhau
     
     
     return http.build();

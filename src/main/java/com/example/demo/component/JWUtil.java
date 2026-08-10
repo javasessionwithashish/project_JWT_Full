@@ -13,18 +13,19 @@ import io.jsonwebtoken.security.Keys;
 public class JWUtil {
 
 	private final String secret_key="This is my supersecret key that is supersecret";
-	
+
 	public String generateToken (String username)
 	{
-		
-		
-		String token=  Jwts.builder()
+
+
+		String token=  Jwts.builder() //initalises a builder for constructing jwt
 				.setSubject(username)
 				.signWith(Keys.hmacShaKeyFor(secret_key.getBytes()))
-				.compact();
+				.compact(); //jwt final form -> header, payload and signature
 	return token;
 	}
-	
+
+	//creates username by parsing jwt token and extract username from claims
 	public String extractUsername(String token)
 	{
 		return Jwts.parserBuilder()
@@ -34,12 +35,12 @@ public class JWUtil {
 				.getBody()
 				.getSubject();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 }

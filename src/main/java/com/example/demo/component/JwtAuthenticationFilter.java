@@ -1,6 +1,5 @@
 package com.example.demo.component;
 
-
 import java.io.IOException;
 import java.util.Collections;
 
@@ -17,47 +16,43 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-	int count=0;
+//OncePerRequestFilter ma doFilterInternal bhanne function chha,
+    //tyo class ko function lai override garera hamle jwt token verification garnai parchha
+
+    int count = 0;
 
     @Autowired
     private JWUtil jwUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                    HttpServletResponse response, 
-                                    FilterChain filterChain) throws ServletException, IOException {
-    	
-    	
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         count++;
-        System.out.println("JWT Filter EXECUTED"+count);
-        
-        String authHeader = request.getHeader("token");
+        System.out.println("JWT Filter EXECUTED" + count);
 
+        String authHeader = request.getHeader("token");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
         	System.out.println("authHeader not null");
             String token = authHeader.substring(7);
             try {
                 String username = jwUtil.extractUsername(token);
 
+                //This code ensures that a user's authentication is properly set up and managed
+                // for each request if they are already authenticated (their username is not null).
+                // Ensure we only call SecurityContextHolder once per request
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                  
-                    UsernamePasswordAuthenticationToken auth = 
+                    // Your existing code to check authentication and set it if necessary
+
+                    UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
-                    //principal->username, credentials are not needed here, role -user or admin
-                    //List.of(
-                    //    new SimpleGrantedAuthority("ROLE_USER"),
-                    //    new SimpleGrantedAuthority("ROLE_ADMIN")
-                    //)
                     SecurityContextHolder.getContext().setAuthentication(auth);
                     System.out.println(SecurityContextHolder.getContext().getAuthentication());
                 }
             } catch (Exception e) {
-               
                 SecurityContextHolder.clearContext();
             }
         }
         filterChain.doFilter(request, response);
-        
-  
+        //the request authenticated is now provided as response to the next entity
+        //request is passed as a validated response
     }
 }
