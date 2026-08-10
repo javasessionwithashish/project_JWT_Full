@@ -41,7 +41,7 @@ public class APIController {
 	        return "INVALID";
 	    }
 	
-	 @GetMapping("/secure")
+	 @GetMapping("/api/secure")
 	 public String secure(@RequestHeader("token") String token) {
 
 	     if ("TOKEN_ABC_123".equals(token)) {
@@ -63,7 +63,7 @@ public class APIController {
 	        return "INVALID";
 	    }
 	
-	 @GetMapping("/securejwt")
+	 @GetMapping("/api/securejwt")
 	 public String securejwt(@RequestHeader("token") String token) {
 
 	     String tok = token.substring(7);
